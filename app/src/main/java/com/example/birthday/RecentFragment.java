@@ -3,10 +3,17 @@ package com.example.birthday;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import java.util.ArrayList;
+
+import static android.content.ContentValues.TAG;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -23,6 +30,10 @@ public class RecentFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    private RecyclerView recyclerView;
+    private RecyclerView.Adapter mAdapter;
+    private RecyclerView.LayoutManager mLayoutManager;
 
     public RecentFragment() {
         // Required empty public constructor
@@ -58,7 +69,18 @@ public class RecentFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_recent, container, false);
+        View view = inflater.inflate(R.layout.fragment_recent, container, false);
+        recyclerView = view.findViewById(R.id.RecView);
+        recyclerView.setHasFixedSize(true);
+        mLayoutManager = new LinearLayoutManager(getContext());
+        recyclerView.setLayoutManager(mLayoutManager);
+        ArrayList<Items> arr = new ArrayList<>();
+        mAdapter = new RecyclerViewAdapter(arr);
+        recyclerView.setAdapter(mAdapter);
+
+        arr.add(new Items("Name1", "Birthday1"));
+        arr.add(new Items("Name2", "Birthday2"));
+        Log.d(TAG, "CreateView started. ");
+        return view;
     }
 }
