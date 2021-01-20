@@ -1,6 +1,8 @@
 package com.example.birthday;
 
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import com.google.android.material.tabs.TabItem;
 import com.google.android.material.tabs.TabLayout;
@@ -41,6 +43,12 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+    }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu){
+        getMenuInflater().inflate(R.menu.add, menu);
+        //return super.onCreateOptionsMenu(menu);
+        return true;
     }
 }
