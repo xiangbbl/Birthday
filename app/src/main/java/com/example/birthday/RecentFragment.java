@@ -69,6 +69,7 @@ public class RecentFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         View view = inflater.inflate(R.layout.fragment_recent, container, false);
         recyclerView = view.findViewById(R.id.RecView);
         recyclerView.setHasFixedSize(true);
@@ -78,8 +79,8 @@ public class RecentFragment extends Fragment {
         mAdapter = new RecyclerViewAdapter(arr);
         recyclerView.setAdapter(mAdapter);
 
-        arr.add(new Items("Name1", "Birthday1"));
-        arr.add(new Items("Name2", "Birthday2"));
+        arr.add(new Items(R.drawable.ic_baseline_person, "Name1", "Birthday1"));
+        arr.add(new Items(R.drawable.ic_baseline_person, "Name2", "Birthday2"));
         Log.d(TAG, "CreateView started. ");
         return view;
     }
