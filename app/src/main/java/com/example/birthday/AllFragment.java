@@ -1,5 +1,8 @@
 package com.example.birthday;
 
+import android.content.ClipData;
+import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -10,8 +13,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 
 import static android.content.ContentValues.TAG;
 
@@ -32,8 +38,13 @@ public class AllFragment extends Fragment {
     private String mParam2;
 
     private RecyclerView recyclerView;
-    private RecyclerView.Adapter mAdapter;
+    //private RecyclerViewAdapter mAdapter;
+    private RecyclerViewAdapter adapter;
     private RecyclerView.LayoutManager mLayoutManager;
+    private DatabaseHelper db;
+    ArrayList<Items> arr = new ArrayList<>();
+    ArrayList<data> arr_data = new ArrayList<>();
+
     public AllFragment() {
         // Required empty public constructor
     }
@@ -66,21 +77,60 @@ public class AllFragment extends Fragment {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        arr.clear();
+        loadData();
+        //adapter.updateList(arr);
+        adapter.notifyDataSetChanged();
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+        //arr.clear();
+        db = new DatabaseHelper(getContext());
         View view = inflater.inflate(R.layout.fragment_all, container, false);
         recyclerView = view.findViewById(R.id.RecView);
         recyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(mLayoutManager);
-        ArrayList<Items> arr = new ArrayList<>();
-        mAdapter = new RecyclerViewAdapter(arr);
-        recyclerView.setAdapter(mAdapter);
 
-        arr.add(new Items(R.drawable.ic_baseline_person, "Name3", "Birthday3"));
-        arr.add(new Items(R.drawable.ic_baseline_person, "Name4", "Birthday4"));
+        adapter = new RecyclerViewAdapter(arr);
+        recyclerView.setAdapter(adapter);
+        adapter.setOnItemClickListener(new RecyclerViewAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(int position) {
+                Log.d(TAG, "item click for All fragment on position" + position);
+                retData(position);
+            }
+        });
+        //loadData();
         Log.d(TAG, "CreateView for All started. ");
         return view;
+    }
+    public void loadData(){
+        Cursor cursor = db.loadData();
+        while(cursor.moveToNext()){
+            arr.add(new Items(R.drawable.ic_baseline_person,
+                    cursor.getString(cursor.getColumnIndex("name")),
+                    cursor.getString(cursor.getColumnIndex("birthday"))));
+        }
+    }
+    public void retData(int position){
+        Cursor cursor = db.retData(arr.get(position).getText1(),arr.get(position).getText2());
+        cursor.moveToNext();
+        String name = cursor.getString(cursor.getColumnIndex("name"));
+        String Nickname = cursor.getString(cursor.getColumnIndex("nickname"));
+        String date = cursor.getString(cursor.getColumnIndex("birthday"));
+        String Addition = cursor.getString(cursor.getColumnIndex("add_info"));
+
+        Intent intent = new Intent(getContext(), ViewInforPage.class);
+        intent.putExtra("name", name);
+        intent.putExtra("nickname", Nickname);
+        intent.putExtra("date", date);
+        intent.putExtra("addition", Addition);
+
+        startActivity(intent);
     }
 }

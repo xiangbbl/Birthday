@@ -2,10 +2,13 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/addActivity"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:background="@color/white"
     android:padding="20dp"
+    android:clickable="true"
+    android:focusableInTouchMode="true"
     tools:context=".AddActivity">
 
     <EditText
@@ -13,8 +16,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
+        android:hint="Name*"
         android:inputType="textPersonName"
-        android:text="Name" />
+        android:textColorHint="#FA0303" />
 
     <EditText
         android:id="@+id/etNickName"
@@ -22,8 +26,8 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/etName"
         android:ems="10"
-        android:inputType="textPersonName"
-        android:text="NickName" />
+        android:hint="Nickname"
+        android:inputType="textPersonName" />
 
     <EditText
         android:id="@+id/etDate"
@@ -33,8 +37,9 @@
         android:editable="false"
         android:ems="10"
         android:focusableInTouchMode="false"
+        android:hint="Birthday*"
         android:inputType="textPersonName"
-        android:text="Birthday" />
+        android:textColorHint="#FF0000" />
 
     <EditText
         android:id="@+id/etDescription"
@@ -42,7 +47,15 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/etDate"
         android:ems="10"
-        android:inputType="textPersonName"
-        android:text="Addition Info" />
+        android:hint="Addition Information"
+        android:inputType="textPersonName" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/etDescription"
+        android:text="*Red are required fields"
+        android:textColor="#FA0303" />
 
 </RelativeLayout>
