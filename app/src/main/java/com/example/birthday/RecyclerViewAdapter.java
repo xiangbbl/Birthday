@@ -5,6 +5,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -14,15 +16,53 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.birthday.Util.MydiffUtilCallback;
 
+import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.List;
 
 import static java.util.Collections.addAll;
 
 
-public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.RecViewHolder> {
+public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.RecViewHolder> implements Filterable{
     private ArrayList<Items> arrayList;
+    private ArrayList<Items> arrayListFull;
     private OnItemClickListener onItemClickListener;
+
+    @Override
+    public Filter getFilter() {
+        return filter;
+    }
+
+    private Filter filter = new Filter() {
+        @Override
+        protected FilterResults performFiltering(CharSequence constraint) {
+            List<Items> filteredList = new ArrayList<>();
+
+            if (constraint == null || constraint.length() == 0) {
+                filteredList.addAll(arrayListFull);
+            } else {
+                String filterPattern = constraint.toString().toLowerCase().trim();
+                //System.out.println("!!!!" + arrayListFull);
+                for (Items item : arrayListFull) {
+                    if (item.getText1().toLowerCase().contains(filterPattern)) {
+                        filteredList.add(item);
+                    }
+                }
+            }
+
+            FilterResults results = new FilterResults();
+            results.values = filteredList;
+            return results;
+        }
+
+        @Override
+        protected void publishResults(CharSequence constraint, FilterResults results) {
+            System.out.println(arrayList);
+            arrayList.clear();
+            arrayList.addAll((ArrayList) results.values);
+            notifyDataSetChanged();
+        }
+    };
 
     public interface OnItemClickListener{
         void onItemClick(int position);
@@ -58,6 +98,9 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     public RecyclerViewAdapter(ArrayList<Items> arrList){
         arrayList = arrList;
+        arrayListFull = new ArrayList<>(arrList);
+        System.out.println("Filter full!!! " + arrayListFull);
+        System.out.println("arrayList??? " + arrayList);
     }
 
     @NonNull
@@ -102,4 +145,5 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         insertList.clear();
         addAll(insertList);
     }
+
 }

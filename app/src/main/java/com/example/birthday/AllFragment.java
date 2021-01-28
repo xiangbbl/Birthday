@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -98,6 +99,11 @@ public class AllFragment extends Fragment {
 
         adapter = new RecyclerViewAdapter(arr);
         recyclerView.setAdapter(adapter);
+        //recyclerView.addItemDecoration();
+
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL);
+        dividerItemDecoration.setDrawable(getResources().getDrawable(R.drawable.recyclerview_divider));
+        recyclerView.addItemDecoration(dividerItemDecoration);
         adapter.setOnItemClickListener(new RecyclerViewAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int position) {
@@ -117,6 +123,7 @@ public class AllFragment extends Fragment {
                     cursor.getString(cursor.getColumnIndex("birthday"))));
         }
     }
+
     public void retData(int position){
         Cursor cursor = db.retData(arr.get(position).getText1(),arr.get(position).getText2());
         cursor.moveToNext();
@@ -130,7 +137,8 @@ public class AllFragment extends Fragment {
         intent.putExtra("nickname", Nickname);
         intent.putExtra("date", date);
         intent.putExtra("addition", Addition);
-
+        intent.putExtra("id", 1);
         startActivity(intent);
+        getActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
     }
 }

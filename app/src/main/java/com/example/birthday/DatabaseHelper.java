@@ -42,7 +42,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     public boolean addData(String mName, String mNickname, String mDate, String mInfo) {
-        //System.out.println(mName + mNickname + mDate + mInfo + "!!!!!!!!!!!!!!!!!!!!!!!");
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(Name, mName);
@@ -86,8 +85,21 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.delete(Birthday, "name = ? and birthday = ? and nickname = ?", new String[]{name, birth, Nickname});
         db.close();
     }
-    public void upDate(){
+    public boolean upDate(String name, String nickname, String birth, String add_info, String old_Name, String old_nickname, String old_birthday){
 
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        cv.put("name", name);
+        cv.put("nickname", nickname);
+        cv.put("birthday", birth);
+        cv.put("add_info", add_info);
+        long ins = db.update(Birthday, cv, "name = ? and birthday = ? and nickname = ?", new String[]{old_Name, old_birthday, old_nickname});
+        db.close();
+        if (ins == -1) {
+            return false;
+        } else {
+            return true;
+        }
     }
 }
 

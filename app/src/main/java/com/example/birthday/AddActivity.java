@@ -97,6 +97,7 @@ public class AddActivity extends AppCompatActivity {
         switch(item.getItemId()){
             case R.id.cancel:
                 finish();
+                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                 return true;
 
             case R.id.check:
@@ -117,6 +118,7 @@ public class AddActivity extends AppCompatActivity {
                     intent.putExtras(b);
                     startActivity(intent);*/
                     finish();
+                    overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                 }
 
             default:
