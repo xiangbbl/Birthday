@@ -61,9 +61,22 @@ public class AddActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Calendar calendar = Calendar.getInstance();
-                int year = calendar.get(Calendar.YEAR);
-                int month = calendar.get(Calendar.MONTH);
-                int day = calendar.get(Calendar.DAY_OF_MONTH);
+                int year;
+                int month;
+                int day;
+                if(sDate.isEmpty()) {
+                    year = calendar.get(Calendar.YEAR);
+                    month = calendar.get(Calendar.MONTH);
+                    day = calendar.get(Calendar.DAY_OF_MONTH);
+                }
+                else{
+                    String sYear = sDate.split("/")[2];
+                    String sMonth = sDate.split("/")[0];
+                    String sDay = sDate.split("/")[1];
+                    year = Integer.parseInt(sYear);//calendar.get(Calendar.YEAR);
+                    month = Integer.parseInt(sMonth) - 1;
+                    day = Integer.parseInt(sDay);
+                }
 
                 DatePickerDialog dialog = new DatePickerDialog(
                         AddActivity.this, android.R.style.Theme_Holo_Light_Dialog_MinWidth,

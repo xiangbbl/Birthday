@@ -9,8 +9,8 @@
         app:showAsAction="ifRoom"
         app:actionViewClass="android.widget.SearchView" />
 
-    <item
+    <!--<item
         android:id="@+id/cancel"
         android:title="Back"
-        app:showAsAction="always"/>
+        app:showAsAction="always"/>-->
 </menu>

@@ -37,6 +37,7 @@ public class SearchActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         db = new DatabaseHelper(this);
         loadData();
         setupRecyclerView();
@@ -70,7 +71,7 @@ public class SearchActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.search, menu);
         itemSearch = menu.findItem(R.id.search);
-        itemBack = menu.findItem(R.id.cancel);
+        //itemBack = menu.findItem(R.id.cancel);
         SearchView searchView = (SearchView) itemSearch.getActionView();
         searchView.setQueryHint("Seach Here");
         searchView.setIconifiedByDefault(true);
@@ -79,8 +80,7 @@ public class SearchActivity extends AppCompatActivity {
         searchView.requestFocusFromTouch();
 
         ImageView close = searchView.findViewById(R.id.search_close_btn);
-        //close.setVisibility(View.GONE);
-        //searchView.
+
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -101,7 +101,8 @@ public class SearchActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 
         switch (item.getItemId()) {
-            case R.id.cancel:
+            /*case R.id.cancel:*/
+            case android.R.id.home:
                 onBackPressed();
                 overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                 return true;
