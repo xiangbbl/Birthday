@@ -17,7 +17,7 @@
         android:layout_height="wrap_content"
         android:ems="10"
         android:hint="Name*"
-        android:inputType="textPersonName"
+        android:inputType="textCapSentences"
         android:textColorHint="#FA0303" />
 
     <EditText
@@ -27,7 +27,7 @@
         android:layout_below="@+id/etName"
         android:ems="10"
         android:hint="Nickname"
-        android:inputType="textPersonName" />
+        android:inputType="textCapSentences" />
 
     <EditText
         android:id="@+id/etDate"
@@ -48,7 +48,7 @@
         android:layout_below="@+id/etDate"
         android:ems="10"
         android:hint="Addition Information"
-        android:inputType="textPersonName" />
+        android:inputType="textCapSentences|textMultiLine" />
 
     <TextView
         android:id="@+id/textView"

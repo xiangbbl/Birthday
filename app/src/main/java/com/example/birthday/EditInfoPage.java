@@ -103,21 +103,26 @@ public class EditInfoPage extends AppCompatActivity {
                 return true;
 
             case R.id.check:
-                boolean ins = mDbHelper.upDate(etName.getText().toString(), etNickname.getText().toString()
-                ,etBirthday.getText().toString(), etAddition.getText().toString(), sName, sNickname, sDate);
-                if(ins){
-                    Toast.makeText(EditInfoPage.this, "Updated Successfully", Toast.LENGTH_SHORT).show();
+                if(etName.getText().toString().isEmpty()){
+                    Toast.makeText(EditInfoPage.this, "Name cannot be empty!", Toast.LENGTH_SHORT).show();
                 }
-                //Intent intent = new Intent(EditInfoPage.this, ViewInforPage.class);
-                Intent intent = new Intent();
-                intent.putExtra("name1", etName.getText().toString());
-                intent.putExtra("nickname1", etNickname.getText().toString());
-                intent.putExtra("date1", etBirthday.getText().toString());
-                intent.putExtra("addition1", etAddition.getText().toString());
-                intent.putExtra("id", getIntent().getExtras().getInt("id"));
-                setResult(RESULT_OK, intent);
-                finish();
-                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+                else {
+                    boolean ins = mDbHelper.upDate(etName.getText().toString(), etNickname.getText().toString()
+                            , etBirthday.getText().toString(), etAddition.getText().toString(), sName, sNickname, sDate);
+                    if (ins) {
+                        Toast.makeText(EditInfoPage.this, "Updated Successfully", Toast.LENGTH_SHORT).show();
+                    }
+                    //Intent intent = new Intent(EditInfoPage.this, ViewInforPage.class);
+                    Intent intent = new Intent();
+                    intent.putExtra("name1", etName.getText().toString());
+                    intent.putExtra("nickname1", etNickname.getText().toString());
+                    intent.putExtra("date1", etBirthday.getText().toString());
+                    intent.putExtra("addition1", etAddition.getText().toString());
+                    intent.putExtra("id", getIntent().getExtras().getInt("id"));
+                    setResult(RESULT_OK, intent);
+                    finish();
+                    overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+                }
                 //startActivity(intent);
                 return false;
             default:

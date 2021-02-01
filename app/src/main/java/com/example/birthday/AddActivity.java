@@ -125,11 +125,6 @@ public class AddActivity extends AppCompatActivity {
                 }
                 else {
                     AddData(sName, sNickName, sDate, sDesc);
-                    /*Bundle b = new Bundle();
-                    b.putInt("id", 1);
-                    Intent intent = new Intent(AddActivity.this, MainActivity.class);
-                    intent.putExtras(b);
-                    startActivity(intent);*/
                     finish();
                     overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                 }
@@ -148,29 +143,7 @@ public class AddActivity extends AppCompatActivity {
         }
 
     }
-    public void EditText_setup(){
-        /*mName.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mName.getText().clear();
-                sName = mName.getText().toString();
-            }
-        });
-        mNickName.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mNickName.getText().clear();
-                sNickName = mNickName.getText().toString();
-            }
-        });
-        mDesc.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mDesc.getText().clear();
-                sDesc = mDesc.getText().toString();
-            }
-        });*/
-    }
+
     public void hideKeyboard(View view){
         InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
         inputMethodManager.hideSoftInputFromWindow(
