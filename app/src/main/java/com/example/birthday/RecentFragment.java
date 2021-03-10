@@ -1,9 +1,14 @@
 package com.example.birthday;
 
+import android.app.Notification;
+import android.app.NotificationManager;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -21,6 +26,8 @@ import java.util.Calendar;
 import java.util.Date;
 
 import static android.content.ContentValues.TAG;
+import static android.content.Context.NOTIFICATION_SERVICE;
+import static com.example.birthday.App.CHANNEL_1_ID;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -45,6 +52,7 @@ public class RecentFragment extends Fragment {
     ArrayList<Items> arr = new ArrayList<>();
     ArrayList<Items> arr_temp = new ArrayList<>();
     private String mDate;
+    private NotificationManagerCompat notificationManagerCompat;
 
     public RecentFragment() {
         // Required empty public constructor
@@ -75,6 +83,7 @@ public class RecentFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        notificationManagerCompat = NotificationManagerCompat.from(getContext());
     }
     @Override
     public void onResume() {
@@ -83,6 +92,7 @@ public class RecentFragment extends Fragment {
         arr_temp.clear();
         loadData();
         mAdapter.notifyDataSetChanged();
+        //notificationManagerCompat = NotificationManagerCompat.from(getContext());
     }
 
     @Override
@@ -115,7 +125,7 @@ public class RecentFragment extends Fragment {
         Calendar c = Calendar.getInstance();
         SimpleDateFormat mFormat = new SimpleDateFormat("MM/dd");
         String CurrTime = mFormat.format(c.getTime());
-        Log.d(TAG, "Current Time: " + CurrTime);
+        //Log.d(TAG, "Current Time: " + CurrTime);
         Date db_time;
         Date cur_time;
         long diff;
@@ -144,6 +154,7 @@ public class RecentFragment extends Fragment {
                     arr_temp.add(new Items(R.drawable.ic_baseline_person,
                             cursor.getString(cursor.getColumnIndex("name")),
                             cursor.getString(cursor.getColumnIndex("birthday"))));
+                    //notification();
                 }
             } catch (ParseException e) {
                 e.printStackTrace();
@@ -176,4 +187,15 @@ public class RecentFragment extends Fragment {
         getActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
     }
 
+    /*public void notification(){
+        Notification notification = new NotificationCompat.Builder(getContext(), CHANNEL_1_ID)
+                .setSmallIcon(R.drawable.ic_baseline_person)
+                .setContentTitle("Birthday")
+                .setContentText("Someone's birthday is coming soon!")
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setCategory(NotificationCompat.CATEGORY_MESSAGE)
+                .build();
+
+        notificationManagerCompat.notify((int) System.currentTimeMillis(), notification);
+    }*/
 }

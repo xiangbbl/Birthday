@@ -1,10 +1,15 @@
 package com.example.birthday;
 
 import android.app.Activity;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.os.SystemClock;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -12,6 +17,7 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.SearchView;
 import android.widget.TabHost;
+import android.widget.Toast;
 
 import com.google.android.material.tabs.TabItem;
 import com.google.android.material.tabs.TabLayout;
@@ -22,12 +28,14 @@ import androidx.viewpager.widget.ViewPager;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity {
     private MenuItem itemSearch;
     private MenuItem itemAdd;
     private RecyclerViewAdapter adapter;
     ActionBar actionBar;
+    DatabaseHelper db;
     //ArrayList<Items> arr = new ArrayList<>();
 
     @Override
@@ -37,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
 
         actionBar = getSupportActionBar();
         actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#FFBCB6B6")));
+
         //adapter = new RecyclerViewAdapter(arr);
 
         /*findViewById(R.id.main_activity).setOnTouchListener(new View.OnTouchListener() {
@@ -120,4 +129,9 @@ public class MainActivity extends AppCompatActivity {
         inputMethodManager.hideSoftInputFromWindow(
                 view.getWindowToken(), 0);
     }
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+    }
+
 }

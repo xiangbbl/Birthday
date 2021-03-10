@@ -4,6 +4,9 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,6 +17,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import java.util.Calendar;
 
 import static android.content.ContentValues.TAG;
 
@@ -61,11 +66,13 @@ public class ViewInforPage extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         try {
-                            db.delete(getIntent().getExtras().getString("name"), getIntent().getExtras().getString("date"),
-                                    getIntent().getExtras().getString("nickname"));
+                            db.delete(etName.getText().toString(), etBirthday.getText().toString(),
+                                    etNickname.getText().toString());
                         }catch (Exception e){
                             Toast.makeText(getApplicationContext(), "Something Wrong opening the Database", Toast.LENGTH_SHORT).show();
                         }
+                        System.out.println("Delete " + getIntent().getExtras().getString("name") + "!!!!!!!!!!!!!!!");
+                        cancelAlarm(getIntent().getExtras().getString("name"), getIntent().getExtras().getString("date"));
                         Toast.makeText(getApplicationContext(), "Person Deleted Successfully", Toast.LENGTH_SHORT).show();
                         finish();
                         overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
@@ -166,5 +173,28 @@ public class ViewInforPage extends AppCompatActivity {
                 addition = data.getStringExtra("addition1");
             }
         }
+    }
+
+    public void cancelAlarm(String name, String date){
+        Calendar c = Calendar.getInstance();
+        c.setTimeInMillis(System.currentTimeMillis());
+
+        Intent intent = new Intent(ViewInforPage.this, Broadcast.class);
+        //Intent intent = new Intent(getApplicationContext(), Broadcast.class);
+        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+
+        int len = name.length();
+        int bYear = Integer.parseInt(date.split("/")[2]);
+        int Month = Integer.parseInt(date.split("/")[0]) - 1;
+        int bDay = Integer.parseInt(date.split("/")[1]);
+
+        c.set(bYear, Month, bDay, 00, 00, 0);
+        c.set(Calendar.MILLISECOND, 0);
+        int id = (int) c.getTimeInMillis() + len + name.charAt(0) + name.charAt(name.length()-1);
+        //System.out.println("id: " + c.getTimeInMillis() + " | " + len + " | " + name.charAt(0) + " | " + name.charAt(name.length() - 1));
+
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(ViewInforPage.this, id, intent, 0);
+        alarmManager.cancel(pendingIntent);
+
     }
 }

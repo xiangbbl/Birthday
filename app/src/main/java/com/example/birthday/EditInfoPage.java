@@ -4,7 +4,10 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
+import android.app.AlarmManager;
 import android.app.DatePickerDialog;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -23,10 +26,10 @@ import android.widget.Toast;
 import java.util.Calendar;
 import java.util.Date;
 import static android.content.ContentValues.TAG;
+import static java.security.AccessController.getContext;
 
 public class EditInfoPage extends AppCompatActivity {
 
-    //TODO: Display data in editText
     private EditText etName;
     private EditText etNickname;
     private EditText etBirthday;
@@ -120,6 +123,7 @@ public class EditInfoPage extends AppCompatActivity {
                     intent.putExtra("addition1", etAddition.getText().toString());
                     intent.putExtra("id", getIntent().getExtras().getInt("id"));
                     setResult(RESULT_OK, intent);
+                    upDateAlarm(etName.getText().toString(), etBirthday.getText().toString(), sName, sDate);
                     finish();
                     overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                 }
@@ -146,5 +150,65 @@ public class EditInfoPage extends AppCompatActivity {
         InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
         inputMethodManager.hideSoftInputFromWindow(
                 view.getWindowToken(), 0);
+    }
+
+    public void upDateAlarm(String nName, String nDate, String oName, String oDate){
+        Calendar c = Calendar.getInstance();
+        c.setTimeInMillis(System.currentTimeMillis());
+
+        Intent intent = new Intent(EditInfoPage.this, Broadcast.class);
+        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+
+        int len = oName.length();
+        int bYear = Integer.parseInt(oDate.split("/")[2]);
+        int Month = Integer.parseInt(oDate.split("/")[0]) - 1;
+        int bDay = Integer.parseInt(oDate.split("/")[1]);
+
+        c.set(bYear, Month, bDay, 00, 00, 0);
+        c.set(Calendar.MILLISECOND, 0);
+        int id = (int) c.getTimeInMillis() + len + oName.charAt(0) + oName.charAt(oName.length()-1);
+        System.out.println("id: " + c.getTimeInMillis() + " | " + len + " | " + oName.charAt(0) + " | " + oName.charAt(oName.length() - 1));
+
+        //PendingIntent pendingIntent = PendingIntent.getBroadcast(EditInfoPage.this, id, intent, 0);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), id, intent, 0);
+        alarmManager.cancel(pendingIntent);
+        pendingIntent.cancel();
+        startAlarm(nName, nDate);
+    }
+
+    public void startAlarm(String nName, String nDate){
+        Calendar c = Calendar.getInstance();
+        c.setTimeInMillis(System.currentTimeMillis());
+        Calendar c1 = Calendar.getInstance();
+        c1.setTimeInMillis(System.currentTimeMillis());
+
+        Intent intent = new Intent(EditInfoPage.this, Broadcast.class);
+        intent.putExtra("name", nName);
+
+        int len = nName.length();
+        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        int Year = c.get(Calendar.YEAR);
+        int bYear = Integer.parseInt(nDate.split("/")[2]);
+        int Month = Integer.parseInt(nDate.split("/")[0]) - 1;
+        int Day = Integer.parseInt(nDate.split("/")[1]) - 6;
+        int bDay = Integer.parseInt(nDate.split("/")[1]);
+        c1.set(bYear, Month, bDay, 00, 00, 0);
+        c1.set(Calendar.MILLISECOND, 0);
+        int id = (int) c1.getTimeInMillis() + len + nName.charAt(0) + nName.charAt(nName.length()-1);
+        System.out.println("id: " + c1.getTime() + " | " + c1.getTimeInMillis());
+        intent.putExtra("id", id);
+
+        c.set(Year, Month, Day, 07, 00, 0);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(EditInfoPage.this, id, intent, 0);
+
+
+        if (c.getTimeInMillis() > System.currentTimeMillis()){
+            System.out.println("Alarm should go off soon");
+        }
+        else {
+            System.out.println("Alarm is already passed");
+            c.set(Year+1, Month, Day, 07, 00, 0);
+        }
+        alarmManager.set(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), pendingIntent);
     }
 }

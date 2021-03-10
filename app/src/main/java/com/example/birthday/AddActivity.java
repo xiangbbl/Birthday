@@ -5,7 +5,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.Activity;
+import android.app.AlarmManager;
 import android.app.DatePickerDialog;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -139,6 +142,7 @@ public class AddActivity extends AppCompatActivity {
         boolean InsertData = mDbHelper.addData(sName, sNickName, sDate, sDesc);
 
         if(InsertData){
+            startAlarm(sDate, sName);
             Toast.makeText(AddActivity.this, "Added Successfully", Toast.LENGTH_SHORT).show();
         }
 
@@ -150,5 +154,47 @@ public class AddActivity extends AppCompatActivity {
                 view.getWindowToken(), 0);
     }
 
+    public void startAlarm(String sDate, String sName){
+        Calendar c = Calendar.getInstance();
+        c.setTimeInMillis(System.currentTimeMillis());
+        Calendar c1 = Calendar.getInstance();
+        c1.setTimeInMillis(System.currentTimeMillis());
+
+        Intent intent = new Intent(AddActivity.this, Broadcast.class);
+        intent.putExtra("name", sName);
+
+        int len = sName.length();
+        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        int Year = c.get(Calendar.YEAR);
+        int bYear = Integer.parseInt(sDate.split("/")[2]);
+        int Month = Integer.parseInt(sDate.split("/")[0]) - 1;
+        int Day = Integer.parseInt(sDate.split("/")[1]) - 6;
+        int bDay = Integer.parseInt(sDate.split("/")[1]);
+        c1.set(bYear, Month, bDay, 00, 00, 0);
+        c1.set(Calendar.MILLISECOND, 0);
+        int id = (int) c1.getTimeInMillis() + len + sName.charAt(0) + sName.charAt(sName.length()-1);
+        System.out.println("id: " + c1.getTime() + " | " + c1.getTimeInMillis());
+        intent.putExtra("id", id);
+        //System.out.println("c1: " + c1.getTimeInMillis());
+        //for(i = Year; i < Year + 111; i++){
+        c.set(Year, Month, Day, 07, 00, 0);
+            //c.set(i, Month, Day, 07, 00, 0);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), id, intent, 0);
+        //System.out.println("c: " + c.getTimeInMillis());
+
+
+        if (c.getTimeInMillis() > System.currentTimeMillis()){
+            System.out.println("Alarm should go off soon");
+        }
+        else {
+            System.out.println("Alarm is already passed");
+            c.set(Year+1, Month, Day, 07, 00, 0);
+        }
+        alarmManager.set(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), pendingIntent);
+        //System.out.println("!!!!!!!!!!!!!!!   " + System.currentTimeMillis());
+        //}
+        //System.out.println("c1: " + System.currentTimeMillis());
+
+    }
 
 }

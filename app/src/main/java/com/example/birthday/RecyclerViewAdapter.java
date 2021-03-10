@@ -99,8 +99,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     public RecyclerViewAdapter(ArrayList<Items> arrList){
         arrayList = arrList;
         arrayListFull = new ArrayList<>(arrList);
-        System.out.println("Filter full!!! " + arrayListFull);
-        System.out.println("arrayList??? " + arrayList);
+        //System.out.println("Filter full!!! " + arrayListFull);
+        //System.out.println("arrayList??? " + arrayList);
     }
 
     @NonNull
@@ -118,6 +118,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         holder.mText1.setText(currItem.getText1());
         holder.mText2.setText(currItem.getText2());
         if(currItem.getText2().equals("Today")) {
+            //System.out.println("Equals today??????????????????????????   " + currItem.getText1());
             holder.mText2.setTextColor(Color.parseColor("#FFFF5100"));
         }
 
